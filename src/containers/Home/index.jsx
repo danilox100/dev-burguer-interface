@@ -1,7 +1,10 @@
 import { CategoryCarousel } from "../../components/CategoryCarousel";
-import { Banner, Container, Content } from "./styles";
+import { OffersCarousel } from "../../components/OffersCarousel";
+import { Banner, Container } from "./styles";
+import { useUser } from "../../hooks/UserContext";
 
 export function Home() {
+    
     return (
         <main>
             <Banner>
@@ -9,10 +12,10 @@ export function Home() {
             </Banner>
 
             <Container>
-                <Content>
+                <div>
                     <CategoryCarousel />
-                    <div>Carrossel Produtos</div>
-                </Content>
+                    <OffersCarousel />
+                </div>
             </Container>
         </main>
     )
