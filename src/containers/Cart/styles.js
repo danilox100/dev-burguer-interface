@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import Backgroundb from "../../assets/bg1.jpg";
-import Background from "../../assets/bg2.png";
+import styled from 'styled-components';
+import Backgroundb from '../../assets/bg1.jpg';
+import Background from '../../assets/bg2.png';
 
 export const Container = styled.div`
     width: 100%;
@@ -9,7 +9,7 @@ export const Container = styled.div`
         rgba(255, 255, 255, 0.5)),
         url('${Background}');
     min-height: 100vh;
-`
+`;
 
 export const Banner = styled.div`
     background: url('${Backgroundb}');
@@ -27,7 +27,7 @@ export const Banner = styled.div`
         height: 130px;
     }
 
-`
+`;
 
 export const Tittle = styled.div`
     font-size: 32px;
@@ -47,16 +47,15 @@ export const Tittle = styled.div`
         background-color: #61a120;
         
     }
-`
+`;
 
 export const Content = styled.div`
     display: grid;
-    grid-template-columns: 1fr 20%;
+    grid-template-columns: 1fr 30%;
     width: 100%;
     max-width: 1280px;
     gap: 40px;
 
     padding: 40px;
     margin: 0 auto;
-`
-
+`;

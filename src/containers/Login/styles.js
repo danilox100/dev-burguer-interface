@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import BackgorundLogin from "../../assets/bg1.jpg";
-import Backgorund from "../../assets/bg2.png";
-import { Link as ReactLink } from "react-router-dom";
+import styled from 'styled-components';
+import BackgorundLogin from '../../assets/bg1.jpg';
+import Backgorund from '../../assets/bg2.png';
+import { Link as ReactLink } from 'react-router-dom';
 
 export const Container = styled.div`
     display: flex;
@@ -55,7 +55,7 @@ export const RightContainer = styled.div`
 
 `;
 
-export const Tittle = styled.h2`
+export const Title = styled.h2`
     font-family: "Road Rage", sans-serif;
     font-size: 40px;
     color: #fff;
@@ -108,4 +108,4 @@ export const InputContainer = styled.div`
 export const Link = styled(ReactLink)`
     text-decoration: none;
     color: #fff;
-`
+`;

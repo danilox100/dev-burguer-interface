@@ -1,8 +1,17 @@
-import { Container, Content, HeaderLink, LinkContainer, Logout, Navigation, Options, Profile } from "./styles";
+import {
+  Container,
+  Content,
+  HeaderLink,
+  LinkContainer,
+  Logout,
+  Navigation,
+  Options,
+  Profile,
+} from './styles';
 
-import { UserCircle, ShoppingCart } from "@phosphor-icons/react";
-import { useNavigate, useLocation } from "react-router-dom";
-import { useUser } from "../../hooks/UserContext";
+import { UserCircle, ShoppingCart } from '@phosphor-icons/react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useUser } from '../../hooks/UserContext';
 
 export function Header() {
   const navigate = useNavigate();
@@ -19,13 +28,13 @@ export function Header() {
       <Content>
         <Navigation>
           <div>
-            <HeaderLink to="/" $isActive={pathname === "/"}>
+            <HeaderLink to="/" $isActive={pathname === '/'}>
               Home
             </HeaderLink>
 
             <hr />
 
-            <HeaderLink to="/cardapio" $isActive={pathname === "/cardapio"}>
+            <HeaderLink to="/cardapio" $isActive={pathname === '/cardapio'}>
               Cardápio
             </HeaderLink>
           </div>

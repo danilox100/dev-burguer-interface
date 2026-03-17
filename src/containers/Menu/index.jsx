@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
-import { CardProduct } from "../../components/CardProduct";
+import { CardProduct, ButtonBack } from "../../components";
 import { api } from "../../services/api";
 import { formatPrice } from "../../utils/formatPrice";
 import { useLocation, useNavigate, useNavigation } from "react-router-dom";
 
 import { Banner, CategoryButton, CategoryMenu, Container, ProductsContainer } from "./styles";
-import { ButtonBack } from "../../components/ButtonBack";
 
 
 export function Menu() {

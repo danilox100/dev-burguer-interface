@@ -1,18 +1,19 @@
-import Logo from "../../assets/Logo.svg";
-import { Banner, Container, Content, Tittle } from "./styles";
-
+import Logo from '../../assets/Logo.svg';
+import { CartItems, CartResume } from '../../components';
+import { Banner, Container, Content, Tittle } from './styles';
 
 export function Cart() {
-    return (
-        <Container>
-            <Banner>
-                <img src={Logo} alt='logo-devburguer'/>
-            </Banner>
-            <Tittle>Checkout - Pedido</Tittle>
-            
-            <Content>
+  return (
+    <Container>
+      <Banner>
+        <img src={Logo} alt="logo-devburguer" />
+      </Banner>
+      <Tittle>Checkout - Pedido</Tittle>
 
-            </Content>
-        </Container>
-    )
+      <Content>
+        <CartItems />
+        <CartResume />
+      </Content>
+    </Container>
+  );
 }

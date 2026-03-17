@@ -1,9 +1,9 @@
-import { useForm } from "react-hook-form"
-import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import { useUser } from "../../hooks/UserContext";
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from 'yup';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../hooks/UserContext';
 
 import {
   Container,
@@ -11,13 +11,13 @@ import {
   InputContainer,
   LeftContainer,
   RightContainer,
-  Tittle,
+  Title,
   Link,
-} from "./styles";
+} from './styles';
 
-import Logo from "../../assets/Logo.svg";
-import { Button } from "../../components/Button";
-import { api } from "../../services/api";
+import Logo from '../../assets/Logo.svg';
+import { Button } from '../../components/Button';
+import { api } from '../../services/api';
 
 export function Login() {
   const navigate = useNavigate();
@@ -27,12 +27,12 @@ export function Login() {
     .object({
       email: yup
         .string()
-        .email("Digite um email válido")
-        .required("O email é obrigatório"),
+        .email('Digite um email válido')
+        .required('O email é obrigatório'),
       password: yup
         .string()
-        .min(6, "A senha deve ter no mínimo 6 caracteres")
-        .required("A senha é obrigatória"),
+        .min(6, 'A senha deve ter no mínimo 6 caracteres')
+        .required('A senha é obrigatória'),
     })
     .required();
 
@@ -44,32 +44,36 @@ export function Login() {
     resolver: yupResolver(schema),
   });
 
- const onSubmit = async (data) => {
-  try {
-    const request = api.post("/sessions", {
-      email: data.email,
-      password: data.password,
-    });
+  const onSubmit = async (data) => {
+    try {
+      const request = api.post('/sessions', {
+        email: data.email,
+        password: data.password,
+      });
 
-    const response = await toast.promise(request, {
-      pending: "Verificando seus dados...",
-      success: "Seja bem vindo(a) ao Dev Burguer! 👨‍🍳",
-      error: "Email ou senha incorretos, tente novamente! 😥",
-    });
+      const response = await toast.promise(request, {
+        pending: 'Verificando seus dados...',
+        success: 'Seja bem vindo(a) ao Dev Burguer! 👨‍🍳',
+        error: 'Email ou senha incorretos, tente novamente! 😥',
+      });
 
-    const { token, ...userData } = response.data;
+      const { token, ...userData } = response.data;
 
-    localStorage.setItem("token", token);
+      localStorage.setItem('token', token);
 
-    putUserData(userData);
+      putUserData(userData);
 
-    setTimeout(() => {
-      navigate("/");
-    }, 2000);
-  } catch (error) {
-    console.log(error);
-  }
-};
+      setTimeout(() => {
+        if (userData?.admin) {
+          navigate('/admin/pedidos');
+        } else {
+          navigate('/');
+        }
+      }, 2000);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <Container>
@@ -78,29 +82,29 @@ export function Login() {
       </LeftContainer>
 
       <RightContainer>
-        <Tittle>
+        <Title>
           Olá, seja bem vindo ao <span>Dev Burguer!</span>
           <br />
           Acesse com seu <span>Login e senha.</span>
-        </Tittle>
+        </Title>
 
         <Form onSubmit={handleSubmit(onSubmit)}>
           <InputContainer>
-            <label>Email</label>
+            <label htmlFor="email">Email</label>
             <input
               type="email"
               placeholder="Digite seu email"
-              {...register("email")}
+              {...register('email')}
             />
             <p>{errors.email?.message}</p>
           </InputContainer>
 
           <InputContainer>
-            <label>Senha</label>
+            <label htmlFor="password">Senha</label>
             <input
               type="password"
               placeholder="Digite sua senha"
-              {...register("password")}
+              {...register('password')}
             />
             <p>{errors.password?.message}</p>
           </InputContainer>
