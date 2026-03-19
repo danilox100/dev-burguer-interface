@@ -14,15 +14,16 @@ import { Filter, FilterOption } from './styles';
 
 export function Orders() {
   const [orders, setOrders] = useState([]);
-  const [filteredOrders, setFilteredOrders] = useState([]);
-  const [activeStatus, setActiveStatus] = useState([9]);
+  const [activeStatus, setActiveStatus] = useState(0);
 
   useEffect(() => {
     async function loadOrders() {
-      const { data } = await api.get('orders');
-
-      setOrders(data);
-      setFilteredOrders(data);
+      try {
+        const { data } = await api.get('/orders');
+        setOrders(data);
+      } catch (err) {
+        console.error('Erro ao buscar pedidos:', err);
+      }
     }
 
     loadOrders();
@@ -30,6 +31,7 @@ export function Orders() {
 
   function createData(order) {
     return {
+      _id: order._id,
       name: order.user.name,
       orderId: order._id,
       date: order.createdAt,
@@ -39,18 +41,20 @@ export function Orders() {
   }
 
   function handleStatus(status) {
-    if (status.id === 0) {
-      setFilteredOrders(orders);
-    } else {
-      const newOrders = orders.filter(
-        (order) => order.status?.toLowerCase() === status.value.toLowerCase(),
-      );
-
-      setFilteredOrders(newOrders);
-    }
-
     setActiveStatus(status.id);
   }
+
+  const filteredOrders = orders.filter((order) => {
+    if (activeStatus === 0) return true;
+
+    const statusSelected = orderStatusOptions.find(
+      (item) => item.id === activeStatus,
+    );
+
+    if (!statusSelected) return true;
+
+    return order.status?.toLowerCase() === statusSelected.value.toLowerCase();
+  });
 
   const rows = filteredOrders.map(createData);
 

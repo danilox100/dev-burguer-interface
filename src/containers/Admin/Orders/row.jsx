@@ -20,46 +20,39 @@ import { ProductImage, SelectStatus } from './styles';
 import { orderStatusOptions } from './orderStatus';
 import { api } from '../../../services/api';
 
-export function Row({ row, setOrders, Orders }) {
+export function Row({ row, setOrders, orders }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState(row.status || '');
 
-  async function newStatusOrder(id, status) {
+  async function newStatusOrder(id, newStatus) {
     try {
       setLoading(true);
-      await api.put(`orders/${id}`, { status });
 
-      const newOrders = orders.map((order) =>
-        order._id === id ? { ...order, status } : order,
+      await api.put(`orders/${id}`, { status: newStatus });
+
+      // 🔥 atualização correta do estado global
+      setOrders((prevOrders) =>
+        prevOrders.map((order) =>
+          order._id === id ? { ...order, status: newStatus } : order,
+        ),
       );
     } catch (err) {
-      console.error(err);
+      console.error('Erro ao atualizar status:', err);
     } finally {
       setLoading(false);
     }
   }
 
-  const handleChangeStatus = (event) => {
-    setStatus(event.target.value);
-  };
-
   return (
     <>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         <TableCell>
-          <IconButton
-            aria-label="expand row"
-            size="small"
-            onClick={() => setOpen(!open)}
-          >
+          <IconButton size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
 
-        <TableCell component="th" scope="row">
-          {row.orderId}
-        </TableCell>
+        <TableCell>{row.orderId}</TableCell>
 
         <TableCell align="right">{row.name}</TableCell>
 
@@ -67,19 +60,17 @@ export function Row({ row, setOrders, Orders }) {
 
         <TableCell align="right">
           <SelectStatus
-            value={status}
+            value={row.status || ''}
             onChange={(event) => {
               const newStatus = event.target.value;
-              setStatus(newStatus);
-              newStatusOrder(row.orderId, newStatus);
+              newStatusOrder(row._id, newStatus); // 🔥 usa _id
             }}
-            displayEmpty
             size="small"
-            renderValue={(selected) => {
-              if (!selected) {
-                return 'Status';
-              }
-              return selected;
+            disabled={loading}
+            MenuProps={{
+              PaperProps: {
+                style: { zIndex: 9999 },
+              },
             }}
           >
             {orderStatusOptions.map((option) => (
@@ -92,10 +83,10 @@ export function Row({ row, setOrders, Orders }) {
       </TableRow>
 
       <TableRow>
-        <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={5}>
+        <TableCell colSpan={5} sx={{ p: 0 }}>
           <Collapse in={open} timeout="auto" unmountOnExit>
-            <Box sx={{ margin: 2 }}>
-              <Typography variant="h6" gutterBottom component="div">
+            <Box sx={{ m: 2 }}>
+              <Typography variant="h6" gutterBottom>
                 Pedido
               </Typography>
 
@@ -105,21 +96,16 @@ export function Row({ row, setOrders, Orders }) {
                     <TableCell>Qtd</TableCell>
                     <TableCell>Produto</TableCell>
                     <TableCell>Categoria</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell />
                   </TableRow>
                 </TableHead>
 
                 <TableBody>
                   {row.products.map((product) => (
                     <TableRow key={product.id}>
-                      <TableCell component="th" scope="row">
-                        {product.quantity}
-                      </TableCell>
-
+                      <TableCell>{product.quantity}</TableCell>
                       <TableCell>{product.name}</TableCell>
-
                       <TableCell>{product.category}</TableCell>
-
                       <TableCell>
                         <ProductImage src={product.url} alt={product.name} />
                       </TableCell>
@@ -137,21 +123,13 @@ export function Row({ row, setOrders, Orders }) {
 
 Row.propTypes = {
   orders: PropTypes.array.isRequired,
-  setOrders: PropTypes.function,
+  setOrders: PropTypes.func.isRequired, // ✅ corrigido
   row: PropTypes.shape({
+    _id: PropTypes.string, // 🔥 essencial
     orderId: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
     status: PropTypes.string,
-    products: PropTypes.arrayOf(
-      PropTypes.shape({
-        id: PropTypes.number.isRequired,
-        category: PropTypes.string.isRequired,
-        name: PropTypes.string.isRequired,
-        price: PropTypes.number.isRequired,
-        quantity: PropTypes.number.isRequired,
-        url: PropTypes.string,
-      }),
-    ).isRequired,
+    products: PropTypes.array.isRequired,
   }).isRequired,
 };
